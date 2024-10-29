@@ -1,35 +1,54 @@
-import React, {useState} from 'react';
+import React, { createContext, useContext, useState } from 'react';
+
+const ThemeContext = createContext('white');
 
 function Blog() {
+  const [theme, setTheme] = useState('white');
 
-    const [formValues, SetFormValues] = useState({});
+ const updateParentTheme = (theme)=> {
+    setTheme(theme);
+ }
 
-    const inputValues = (e) => {
-        console.log(e.target.name, e.target.value);
-        formValues[e.target.name] = e.target.value;
-        SetFormValues(formValues);
-        console.log(formValues);
-    }
+  /*const providerValue = React.useMemo(() => ({
+    theme, setTheme,
+}), [theme]);*/
 
-    const submit = (e) => {
-        console.log('Testing');    
-    }
+  return (
+    <ThemeContext.Provider value={{theme, updateParentTheme}}>
+      <ComponentA />
+      <ComponentB />
+    </ThemeContext.Provider>
+  );
+}
 
+function ComponentA() {
+  console.log(useContext(ThemeContext));
+  const { theme, updateParentTheme } = useContext(ThemeContext);
+  const updateTheme = (theme)=> {
+    updateParentTheme(theme);
+   }
+  return (
+    <div>
+       <h1>Component A- <small>click will change button color Yellow</small></h1>
+       <button onClick={()=>updateTheme('yellow')} style={{backgroundColor:`${theme}`}}>{theme}</button>
+    </div>
+  );
+}
 
+function ComponentB() {
+    const { theme, updateParentTheme } = useContext(ThemeContext);
+  // Use the theme value here
+    
+   const updateTheme = (theme)=> {
+    updateParentTheme(theme);
+   }
 
-    return(
-        <>
-            <div>
-                <h1>Blog</h1>
-                <form>
-                    <p><label for="title">Title:</label> <input onChange={inputValues} name='title' value={formValues.title} type='text' htmlFor="title" /></p>
-                    <p><label for="desc">Desc:</label> <textarea onChange={inputValues} name='desc' value={formValues.desc} htmlFor="desc"></textarea></p>
-                    <button onClick={submit}>Button</button>
-                </form>
-            </div>
-        </>
-    )
-
+  return (
+    <div>
+       <h1>Component B - <small>click will change button color blue</small></h1>
+      <button onClick={()=>updateTheme('blue')} style={{backgroundColor:`${theme}`}}>{theme}</button>
+    </div>
+  );
 }
 
 export default Blog;

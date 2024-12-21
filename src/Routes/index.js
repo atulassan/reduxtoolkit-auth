@@ -27,6 +27,7 @@ const AppRoutes = (props) => {
         { path: '/about', name: 'About', props: { name: 'About' }},
         { path: '/login', name: 'Login', props: { name: 'Login' }},
         { path: '/register', name: 'Register', props: { name: 'Register' }},
+        { path: '/tab', name: 'Tab', props: { name: 'Tab' }},
     ];
 
     const privateRouteData = [ 
